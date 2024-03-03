@@ -96,6 +96,7 @@ cm_dt = confusion_matrix(y_test, y_pred_dt)
 x_axis_labels_dt = ["Edible", "Poisonous"]
 y_axis_labels_dt = ["Edible", "Poisonous"]
 f_dt, ax_dt = plt.subplots(figsize =(7,7))
+sns.heatmap(cm_dt, annot = True, linewidths=0.2, linecolor="black", fmt = ".0f", ax_dt=ax, cmap="Purples", xticklabels=x_axis_labels_dt, yticklabels=y_axis_labels_dt)
 plt.xlabel("PREDICTED LABEL")
 plt.ylabel("TRUE LABEL")
 plt.title('Confusion Matrix for Decision Tree Classifier')
