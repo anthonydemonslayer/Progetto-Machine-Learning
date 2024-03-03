@@ -8,6 +8,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.neighbors import KNeighborsClassifier
+
 
 # https://www.kaggle.com/datasets/ulrikthygepedersen/mushroom-attributes?rvi=1
 df = pd.read_csv("mushroom.csv")
@@ -102,6 +104,36 @@ plt.ylabel("TRUE LABEL")
 plt.title('Confusion Matrix for Decision Tree Classifier')
 plt.savefig("dtcm.png", format='png', dpi=500, bbox_inches='tight')
 plt.show()
+
+#CLASSIFICAZIONE KNN
+best_Kvalue = 0
+best_score = 0
+for i in range(1,10):
+    knn = KNeighborsClassifier(n_neighbors=i)
+    knn.fit(X_train, y_train)
+    if knn.score(X_test, y_test) > best_score:
+        best_score = knn.score(X_train, y_train)
+        best_Kvalue = i
+
+print("Best KNN Value: {}".format(best_Kvalue))
+print("Test Accuracy: {}%".format(round(best_score*100,2)))
+
+#RAPPORTO DI CLASSIFICAZIONE
+y_pred_knn = knn.predict(X_test)
+print("KNN Classifier report: \n\n", classification_report(y_test, y_pred_knn))
+
+#MATRICE DI CONFUSIONE KNN
+cm_knn = confusion_matrix(y_test, y_pred_knn)
+x_axis_labels_knn = ["Edible", "Poisonous"]
+y_axis_labels_knn = ["Edible", "Poisonous"]
+f_knn, ax_knn = plt.subplots(figsize =(7,7))
+sns.heatmap(cm_knn, annot = True, linewidths=0.2, linecolor="black", fmt = ".0f", ax_knn=ax, cmap="Purples", xticklabels=x_axis_labels_knn, yticklabels=y_axis_labels_knn)
+plt.xlabel("PREDICTED LABEL")
+plt.ylabel("TRUE LABEL")
+plt.title('Confusion Matrix for KNN Classifier')
+plt.savefig("knncm.png", format='png', dpi=500, bbox_inches='tight')
+plt.show()
+
 
 #CLASSIFICAZIONE CASUALE DELLE FORESTE (RANDOM FOREST)
 
